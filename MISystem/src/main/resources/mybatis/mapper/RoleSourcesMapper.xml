@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunzimo.mapper.RoleSourcesMapper" >
+  <resultMap id="BaseResultMap" type="com.yunzimo.Bean.RoleSources" >
+    <id column="rsid" property="rsid" jdbcType="INTEGER" />
+    <result column="rsdis" property="rsdis" jdbcType="VARCHAR" />
+    <result column="resources_fk" property="resourcesFk" jdbcType="INTEGER" />
+    <result column="role_fk" property="roleFk" jdbcType="INTEGER" />
+  </resultMap>
+
+  <insert id="addRoleSources" parameterType="com.yunzimo.Bean.RoleSources">
+    insert into role_sources
+    (resources_fk,role_fk) values
+    <foreach collection="list" separator="," item="rs">
+      (#{rs.resourcesFk},#{rs.roleFk})
+    </foreach>
+  </insert>
+
+  <insert id="addRs" parameterType="roleSources">
+    insert into  role_sources (rsdis,resources_fk, role_fk) values (#{rsdis},#{resourcesFk},#{roleFk})
+  </insert>
+
+</mapper>

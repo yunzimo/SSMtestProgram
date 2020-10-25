@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunzimo.mapper.EmployeeMapper" >
+  <resultMap id="BaseResultMap" type="com.yunzimo.Bean.Employee" >
+    <id column="eid" property="eid" jdbcType="INTEGER" />
+    <result column="ename" property="ename" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="hirdate" property="hirdate" jdbcType="DATE" />
+    <result column="dept_fk" property="deptFk" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="WithDept" type="employee" extends="BaseResultMap">
+<!--     <association property="dept" column="deptFk"-->
+<!--                  resultMap="com.yunzimo.mapper.DeptMapper.BaseResultMap"-->
+<!--                  select="com.yunzimo.mapper.DeptMapper.QueryByDeptno"/>-->
+    <association property="dept" javaType="dept" resultMap="com.yunzimo.mapper.DeptMapper.BaseResultMap"/>
+  </resultMap>
+
+  <select id="QueryAll" resultMap="WithDept">
+    select * from employee e,dept d where e.dept_fk=d.deptno
+  </select>
+
+
+  <select id="QueryOne" resultMap="WithDept">
+    select * from employee e,dept d where e.dept_fk=d.deptno and e.eid=#{eid}
+  </select>
+
+  <insert id="addEmployee" parameterType="employee">
+    insert into employee (ename, address, email, hirdate, dept_fk) VALUE
+        (#{ename},#{address},#{email},#{hirdate},#{deptFk})
+  </insert>
+
+  <delete id="DelEmployee" parameterType="int">
+    delete from employee where eid=#{eid}
+  </delete>
+
+  <update id="updateEmployee" parameterType="employee">
+    update employee set ename=#{ename},address=#{address},email=#{email},hirdate=#{hirdate},dept_fk=#{deptFk}
+        where eid=#{eid}
+  </update>
+</mapper>
